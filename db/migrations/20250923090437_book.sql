@@ -1,0 +1,14 @@
+-- migrate:up
+CREATE TABLE IF NOT EXISTS book (
+    id UUID NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    language VARCHAR(255) NOT NULL,
+    tags VARCHAR[],
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- migrate:down
+
+DROP TABLE IF EXISTS book;

@@ -1,0 +1,76 @@
+@startuml DB Design
+entity "Book Schema" as book {
+    * id : UUID <<PK>>
+    --
+    * title : String
+    * author : String
+    * cover_url : String
+    * language : String
+    * tags : String[]
+}
+entity "User Schema" as user {
+    * id : UUID <<PK>>
+    --
+    * usernamea : String
+    * email : String
+    * password_hash : String
+    * created_at : DateTime
+    * updated_at : DateTime
+}
+entity "Book Condition Schema" as book_condition {
+    * id : UUID <<PK>>
+    * book_id : UUID <<FK>>
+    * owned_by_user_id : UUID <<FK>>
+    --
+    * format : String
+    * published_date : Date
+    * isbn : String
+    * pages : Integer
+    * stored_at : DateTime
+    * location : String
+    * url_location : String
+    * is_available : Boolean
+}
+entity "Loan Schema" as loan {
+    * id
+    * user_id : UUID <<FK>>
+    * book_condition_id : UUID <<FK>>
+    ---
+    * loaned_at : DateTime
+    * due_date : DateTime
+    * returned_at : DateTime
+    * status : String
+}
+entity "Tag Schema" as tag {
+    * id : UUID <<PK>>
+    --
+    * name : String
+    description : String
+}
+entity "Book Tag Schema" as book_tag {
+    * id : UUID <<PK>>
+    * book_id : UUID <<FK>>
+    * tag_id : UUID <<FK>>
+}
+entity "reading_list Schema" as reading_list {
+    * id : UUID <<PK>>
+    * user_id : UUID <<FK>>
+    * tag_id : UUID <<FK>>
+    * book_id : UUID <<FK>>
+    --
+    * added_at : DateTime
+    * priority : Integer
+    * status : String
+    notes : String
+}
+book_condition }|..|| book : "belongs to"
+loan }|..|| book_condition : "is for"
+reading_list }|..|| book : "includes"
+reading_list }|..|| tag : "categorized by"
+tag }|..|| book_tag : "associates with"
+book }|..|| book_tag : "has" "many"
+user }|..|| loan : "borrows"
+user }|..|| reading_list : "owned by"
+
+
+@enduml
