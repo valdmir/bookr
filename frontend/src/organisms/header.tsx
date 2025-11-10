@@ -1,6 +1,11 @@
-import { Box, Flex, Link as LinkRadix, TabNav } from "@radix-ui/themes";
+import { Box, Flex } from "@radix-ui/themes";
 import { Link } from "@tanstack/react-router";
 import bookrLogo from "../assets/bookr-logo-black.png";
+import { NavigationMenu, 
+  navigationMenuTriggerStyle,
+ NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { NavigationMenuList } from "@radix-ui/react-navigation-menu";
+
 export default function Header() {
   return (
     <header>
@@ -10,11 +15,20 @@ export default function Header() {
             <img src={bookrLogo} height={40} alt="React logo" />
           </Box>
           <Box>
-            <TabNav.Root>
-              <TabNav.Link>My Library</TabNav.Link>
-              <TabNav.Link>My Reading List</TabNav.Link>
-              <TabNav.Link>Lend History</TabNav.Link>
-            </TabNav.Root>
+            <NavigationMenu>
+              <NavigationMenuList className="flex-wrap">
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <Link href="/docs" to={"."}>Docs</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <Link href="/docs" to={"."}>Docs</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </Box>
           <Box>
             <span>Account</span>
