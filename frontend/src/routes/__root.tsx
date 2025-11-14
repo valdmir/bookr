@@ -1,12 +1,20 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import Header from "@/organisms/header";
-export const Route = createRootRoute({
-  component: () => (
+
+function RootComponent() {
+  return (
     <>
       <Header />
       <Outlet />
       <TanStackRouterDevtools />
     </>
-  ),
+  );
+}
+
+interface MyRouterContext {
+  showDefaultHeader: boolean;
+}
+export const Route = createRootRouteWithContext<MyRouterContext>()({
+  component: RootComponent,
 });

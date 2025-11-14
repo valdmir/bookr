@@ -5,21 +5,31 @@ import com.bivala.bookr.entity.Book;
 import com.bivala.bookr.entity.BookFormat;
 import com.bivala.bookr.usecase.BookFormatUC;
 import com.bivala.bookr.usecase.BookUC;
+import com.bivala.bookr.usecase.MinioUC;
 import org.apache.tomcat.util.http.parser.HttpParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
+
     private BookUC bookUC;
     private BookFormatUC bookFormatUC;
-    public BookController(BookUC bookUC, BookFormatUC bookFormatUC ){
+    @Autowired
+    private MinioUC minioUC;
+    public BookController(BookUC bookUC, BookFormatUC bookFormatUC){
         this.bookUC=bookUC;
         this.bookFormatUC=bookFormatUC;
     }
@@ -75,5 +85,26 @@ public class BookController {
         }
         bookUC.delete(bookId);
         return "Successfull delete book with ID:"+bookId;
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFiles(@RequestParam("file")List<MultipartFile> files){
+       for(MultipartFile file: files){
+           if (!"application/pdf".equalsIgnoreCase(file.getContentType())) {
+               return ResponseEntity
+                       .badRequest()
+                       .body(Map.of("error", "Only PDF files are allowed"));
+           }
+           try {
+               Map<String, Object> response = new HashMap<>();
+               String bookFilename=minioUC.uploadFile(file);
+               String thumbnailFilename=minioUC.uploadFileAndGenerateThumbnail(file);
+               response.put("file_url",bookFilename);
+               response.put("cover_url",thumbnailFilename);
+               return ResponseEntity.status(HttpStatus.CREATED).body(response);
+           } catch (Exception e) {
+               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload file: " + e.getMessage());
+           }
+       }
+        return null;
     }
 }

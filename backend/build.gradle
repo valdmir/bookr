@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
+    implementation 'org.apache.pdfbox:pdfbox:3.0.2'
+    implementation 'io.minio:minio:8.6.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	compileOnly 'org.projectlombok:lombok'

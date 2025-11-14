@@ -1,0 +1,45 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  application:
+    name: bookr
+  datasource:
+    url: jdbc:postgresql://100.69.68.88:5432/bookr
+    username: valdmir
+    password: _9yaa.F9mU.q*.rrkre
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob.non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+server:
+  tomcat:
+    max-swallow-size: -1
+    max-post-size: -1
+  jetty:
+    max-http-form-post-size: 100MB
+  undertow:
+    max-http-post-size: 100MB
+  port: 9090
+  #spring.main.banner-mode=on
+
+  # CHANGE LOGGING LEVEL
+logging:
+  level:
+    root: info
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: info
+minio:
+  url: http://s3.bivala.com
+  access-key: EYWZ3CJB4LTXS5UGF9SN
+  secret-key: lHmaOGM3ifmd5A+oZKGWlOKLyurlFcPV+xVyzgQ8
+  bucket-name: books

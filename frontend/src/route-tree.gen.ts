@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardTemplateRouteImport } from './routes/dashboard-template'
+import { Route as AddBookRouteImport } from './routes/add-book'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const DashboardTemplateRoute = DashboardTemplateRouteImport.update({
   id: '/dashboard-template',
   path: '/dashboard-template',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddBookRoute = AddBookRouteImport.update({
+  id: '/add-book',
+  path: '/add-book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/add-book': typeof AddBookRoute
   '/dashboard-template': typeof DashboardTemplateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/add-book': typeof AddBookRoute
   '/dashboard-template': typeof DashboardTemplateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/add-book': typeof AddBookRoute
   '/dashboard-template': typeof DashboardTemplateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/dashboard-template'
+  fullPaths: '/' | '/about' | '/add-book' | '/dashboard-template'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/dashboard-template'
-  id: '__root__' | '/' | '/about' | '/dashboard-template'
+  to: '/' | '/about' | '/add-book' | '/dashboard-template'
+  id: '__root__' | '/' | '/about' | '/add-book' | '/dashboard-template'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AddBookRoute: typeof AddBookRoute
   DashboardTemplateRoute: typeof DashboardTemplateRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard-template'
       fullPath: '/dashboard-template'
       preLoaderRoute: typeof DashboardTemplateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-book': {
+      id: '/add-book'
+      path: '/add-book'
+      fullPath: '/add-book'
+      preLoaderRoute: typeof AddBookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AddBookRoute: AddBookRoute,
   DashboardTemplateRoute: DashboardTemplateRoute,
 }
 export const routeTree = rootRouteImport
