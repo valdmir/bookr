@@ -2,10 +2,12 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Library, Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 export default function Header() {
   const routerState = useRouterState();
   const currentRoute = routerState.matches.at(-1); // last matched route
   const showDefaultHeader = currentRoute?.context?.showDefaultHeader ?? true;
+  
   return (
     <header className="relative top-0 z-10 px-6 py-5 lg:z-10 lg:flex lg:h-16 lg:items-center content-center lg:px-8 lg:py-0 dark:border-white/10 dark:bg-zinc-950">
       <div className="mx-auto flex w-full items-center justify-between md:max-w-7xl">

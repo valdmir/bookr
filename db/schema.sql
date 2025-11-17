@@ -36,7 +36,7 @@ CREATE TABLE public.book (
 CREATE TABLE public.book_format (
     id bigint NOT NULL,
     book_id uuid,
-    owned_by_user_id bigint,
+    owned_by_user_id character varying(200) NOT NULL,
     isbn character varying(255),
     pages integer DEFAULT 0,
     cover_url character varying(255),

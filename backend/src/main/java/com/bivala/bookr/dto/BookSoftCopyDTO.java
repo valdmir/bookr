@@ -12,6 +12,6 @@ public class BookSoftCopyDTO {
     public int pages;
     public String coverUrl;
     public String locationUrl;
-    public LocalDate PublishedDate;
+    public LocalDate publishedDate;
     public String format;
 }

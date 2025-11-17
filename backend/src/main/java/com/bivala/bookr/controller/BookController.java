@@ -6,7 +6,6 @@ import com.bivala.bookr.entity.BookFormat;
 import com.bivala.bookr.usecase.BookFormatUC;
 import com.bivala.bookr.usecase.BookUC;
 import com.bivala.bookr.usecase.MinioUC;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -43,10 +39,10 @@ public class BookController {
     public ResponseEntity<?> saveBook(@RequestBody BookSoftCopyDTO bookRequest){
         Optional<Book> book=bookUC.findByTitleOrAuthor(bookRequest.title,bookRequest.author);
         Book theBook;
+        String format=getExtension(bookRequest.locationUrl);
         BookFormat theBookFormat=new BookFormat("testing1","",bookRequest.pages,bookRequest.coverUrl,
-                LocalDateTime.now(), bookRequest.format, bookRequest.locationUrl,bookRequest.PublishedDate,true);
+                LocalDateTime.now(), format, bookRequest.locationUrl,bookRequest.publishedDate,true);
         if (book.isEmpty()){
-
             theBook=new Book(bookRequest.title,bookRequest.author,bookRequest.language,bookRequest.tags);
             bookUC.save(theBook);
         }else{
@@ -55,11 +51,21 @@ public class BookController {
         Optional<BookFormat> bookFormat=bookFormatUC.findByBookIDWithFormat(theBook.getId(),bookRequest.format);
         if(!bookFormat.isEmpty()){
 //           theBookFormat.setBookID(theBook.getId());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Format for this book already exists");
+            Map<String, Object> response = new HashMap<>();
+            response.put("ok",false);
+            response.put("message","Format for this book already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         theBookFormat.setBookID(theBook.getId());
         bookFormatUC.save(theBookFormat);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookFormat);
+    }
+    private String getExtension(String originalFilename){
+        int dotIndex = Objects.requireNonNull(originalFilename).lastIndexOf('.');
+        if (dotIndex > 0) {
+            return originalFilename.substring(dotIndex+1);
+        }
+        return "";
     }
 //  This API for pyhsical books
 //    @PostMapping("/books/hardcopy")

@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS book_format ( 
     id BIGSERIAL PRIMARY KEY,
     book_id UUID REFERENCES book(id),
-    owned_by_user_id BIGINT,
+    owned_by_user_id VARCHAR(200) NOT NULL,
     isbn VARCHAR(255),
     pages INT DEFAULT 0,
     cover_url VARCHAR(255),
